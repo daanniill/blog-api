@@ -10,11 +10,11 @@ module.exports = {
         database: "connected",
       });
     } catch (error) {
-    res.status(503).json({
-      status: "error",
-      api: "running",
-      database: "disconnected",
-    });
+      res.status(503).json({
+        status: "error",
+        api: "running",
+        database: "disconnected",
+      });
+    }
   }
-}
 }
