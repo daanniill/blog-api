@@ -36,20 +36,16 @@ npm start      # plain node
 
 ### Health
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/health` | Check database connection |
+- GET: `/api/health`; Check database connection
 
 ### Posts
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/posts` | Get all posts |
-| GET | `/api/posts/:id` | Get a post by ID |
-| GET | `/api/posts/slug/:slug` | Get a post by slug |
-| POST | `/api/posts` | Create a post |
-| PATCH | `/api/posts/:id` | Update a post |
-| DELETE | `/api/posts/:id` | Delete a post |
+- GET: `/api/posts`; Get all posts
+- GET: `/api/posts/:id`; Get a post by ID
+- GET: `/api/posts/slug/:slug`; Get a post by slug
+- POST: `/api/posts`; Create a post
+- PATCH: `/api/posts/:id`; Update a post
+- DELETE: `/api/posts/:id`; Delete a post
 
 > Creating, updating, and deleting posts requires authentication.
 
