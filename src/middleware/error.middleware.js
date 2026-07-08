@@ -1,4 +1,4 @@
-export function notFoundHandler(req, res, next) {
+function notFoundHandler(req, res, next) {
   const error = new Error(
     `Route not found: ${req.method} ${req.originalUrl}`
   )
@@ -6,9 +6,11 @@ export function notFoundHandler(req, res, next) {
   next(error);
 }
 
-export function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res, next) {
   console.error(err);
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   res.status(statusCode).json({ error: message });
 }
+
+module.exports = { notFoundHandler, errorHandler };

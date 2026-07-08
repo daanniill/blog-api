@@ -24,13 +24,10 @@ module.exports = {
     }
   },
   async createPost(req, res) {
-    const { id, title, slug, summary, content, cover_image_url } = req.body;
-    if (!id || !title || !slug) {
-      return res.status(400).json({ error: "id, title, and slug are required" });
-    }
+    const { title, slug, summary, content, cover_image_url } = req.body;
     const results = await pool.query(
-      "INSERT INTO posts (id, title, slug, summary, content, cover_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [id, title, slug, summary, content, cover_image_url]
+      "INSERT INTO posts (title, slug, summary, content, cover_image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [title, slug, summary, content, cover_image_url]
     );
     res.status(201).json(results.rows[0]);
   },

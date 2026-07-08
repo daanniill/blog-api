@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { getPosts, getPostById, getPostBySlug, updatePost, createPost, deletePost } = require("../controllers/posts.controller");
+const { asyncHandler } = require("../middleware/asyncHandler");
+const { validateCreatePost, validateUpdatePost } = require("../middleware/post.middleware");
+const { requireAuth } = require("../middleware/auth.middleware");
 
-router.get("/", (req, res) => {getPosts(req, res)});
-router.get("/:id", (req, res) => {getPostById(req, res)});
-router.get("/slug/:slug", (req, res) => {getPostBySlug(req, res)});
-router.post("/", (req, res) => {createPost(req, res)});
-router.put("/:id", (req, res) => {updatePost(req, res)});
-router.delete("/:id", (req, res) => {deletePost(req, res)});
+router.get("/", asyncHandler(getPosts));
+router.get("/:id", asyncHandler(getPostById));
+router.get("/slug/:slug", asyncHandler(getPostBySlug));
+router.post("/", requireAuth, validateCreatePost, asyncHandler(createPost));
+router.patch("/:id", requireAuth, validateUpdatePost, asyncHandler(updatePost));
+router.delete("/:id", requireAuth, asyncHandler(deletePost));
 
 module.exports = router;

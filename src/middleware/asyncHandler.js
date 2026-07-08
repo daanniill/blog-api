@@ -1,4 +1,4 @@
-export function asyncHandler(controller) {
+function asyncHandler(controller) {
   return async (req, res, next) => {
     try {
       await controller(req, res, next);
@@ -7,3 +7,5 @@ export function asyncHandler(controller) {
     }
   };
 }
+
+module.exports = { asyncHandler };
