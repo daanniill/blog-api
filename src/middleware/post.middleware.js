@@ -3,61 +3,98 @@ const validPostFields = [
   "slug",
   "summary",
   "content",
-  "cover_image_url"
-]
+  "cover_image_url",
+];
 
-function validatePostFields(req, res, next) {
-  const { title, slug, summary, content, cover_image_url } = req.body;
+export function validatePostFields(req, res, next) {
+  const {
+    title,
+    slug,
+    summary,
+    content,
+    cover_image_url,
+  } = req.body;
 
-  if (!title || !slug) {
-    return res.status(400).json({ error: "Title and slug are required" });
+  // Check required fields.
+  if (typeof title !== "string" || !title.trim()) {
+    return res.status(400).json({
+      error: "Title is required and must be a non-empty string",
+    });
   }
 
-  // Check for invalid fields in the request body
+  if (typeof slug !== "string" || !slug.trim()) {
+    return res.status(400).json({
+      error: "Slug is required and must be a non-empty string",
+    });
+  }
+
+  // Check for fields that the API does not accept.
   const invalidFields = Object.keys(req.body).filter(
     (field) => !validPostFields.includes(field)
   );
+
   if (invalidFields.length > 0) {
-    return res.status(400).json({ error: `Invalid fields: ${invalidFields.join(", ")}` });
+    return res.status(400).json({
+      error: `Invalid fields: ${invalidFields.join(", ")}`,
+    });
   }
 
-  // Check individual field types
-  if (title) {
-    if (typeof title !== "string" || !title.trim()) {
-      return res.status(400).json({ error: "Title must be a non-empty string" });
-    } else if (title.length > 200) {
-      return res.status(400).json({ error: "Title must be 200 characters or fewer" });
-    }
+  if (title.trim().length > 200) {
+    return res.status(400).json({
+      error: "Title must be 200 characters or fewer",
+    });
   }
 
-  if (slug) {
-    if (typeof slug !== "string" || !slug.trim()) {
-      return res.status(400).json({ error: "Slug must be a non-empty string" });
-    } else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-      return res.status(400).json({ error: "Slug must be a valid format" });
-    }
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug.trim())) {
+    return res.status(400).json({
+      error:
+        "Slug can only contain lowercase letters, numbers, and single hyphens",
+    });
   }
 
-  if (summary) {
-    if (typeof summary !== "string" || !summary.trim()) {
-      return res.status(400).json({ error: "Summary must be a non-empty string" });
-    }
+  if (
+    summary !== undefined &&
+    (typeof summary !== "string" || !summary.trim())
+  ) {
+    return res.status(400).json({
+      error: "Summary must be a non-empty string",
+    });
   }
 
-  if (content) {
-    if (typeof content !== "string" || !content.trim()) {
-      return res.status(400).json({ error: "Content must be a non-empty string" });
-    }
+  if (
+    content !== undefined &&
+    (typeof content !== "string" || !content.trim())
+  ) {
+    return res.status(400).json({
+      error: "Content must be a non-empty string",
+    });
   }
 
-  if (cover_image_url) {
-    if (typeof cover_image_url !== "string" || !cover_image_url.trim()) {
-      return res.status(400).json({ error: "Cover image URL must be a non-empty string" });
-    }
+  if (
+    cover_image_url !== undefined &&
+    cover_image_url !== null &&
+    (typeof cover_image_url !== "string" ||
+      !cover_image_url.trim())
+  ) {
+    return res.status(400).json({
+      error: "Cover image URL must be a non-empty string or null",
+    });
   }
 
-  if (errors.length > 0) {
-    return res.status(400).json({ error: errors });
+  // Normalize values before passing them to the controller.
+  req.body.title = title.trim();
+  req.body.slug = slug.trim();
+
+  if (typeof summary === "string") {
+    req.body.summary = summary.trim();
+  }
+
+  if (typeof content === "string") {
+    req.body.content = content.trim();
+  }
+
+  if (typeof cover_image_url === "string") {
+    req.body.cover_image_url = cover_image_url.trim();
   }
 
   next();
