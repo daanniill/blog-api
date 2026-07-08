@@ -1,4 +1,4 @@
-module.exports = (req, res, next) => {
+export function requestLogger (req, res, next) {
   const start = Date.now();
   res.on("finish", () => {
     const duration = Date.now() - start;

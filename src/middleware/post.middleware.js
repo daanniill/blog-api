@@ -99,3 +99,22 @@ export function validatePostFields(req, res, next) {
 
   next();
 }
+
+export function validateCreatePost(req, res, next) {
+  if (!req.body.title || !req.body.slug) {
+    return res.status(400).json({
+      error: "Title and slug are required fields",
+    });
+  }
+  return validPostFields(req, res, next);
+}
+
+export function validateUpdatePost(req, res, next) {
+  if (!req.body.title && !req.body.slug && !req.body.summary && !req.body.content && !req.body.cover_image_url) {
+    return res.status(400).json({
+      error: "At least one field (title, slug, summary, content, cover_image_url) must be provided for update",
+    });
+
+    next();
+  }
+}

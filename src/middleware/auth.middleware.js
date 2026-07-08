@@ -1,4 +1,4 @@
-export function requestLogger (req, res, next) {
+export function requireAuth (req, res, next) {
   const providedKey = req.get("x-api-key");
   const adminKey = process.env.ADMIN_API_KEY;
 
